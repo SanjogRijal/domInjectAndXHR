@@ -1,0 +1,51 @@
+<html>
+	<head> 
+		<title> DOM Injection and XMLHttpRequest </title>
+	</head>
+
+	<body>
+		<div id = "root">
+		</div>
+	</body>
+
+	<script>
+		(() => {
+			let root = document.getElementById("root");
+			let button = document.createElement("button");
+			button.setAttribute("id","button");
+			button.setAttribute("type","button");
+			button.innerHTML = "Click Me!";
+			root.append(button);
+			
+		   	let buttonForEventHandling = document.getElementById("button");
+	                buttonForEventHandling.onclick = () => {
+                        let url = "https://api.publicapis.org/entries";
+                        let method = "GET"
+                        let xhr = new XMLHttpRequest();
+                        let pTag = document.createElement("p");
+                               
+                        pTag.innerHTML = "Fetching Data...............";
+                        xhr.onreadystatechange = () => {
+                        	 if(xhr.readyState === XMLHttpRequest.DONE) {
+                                        console.log(xhr.responseText);
+                                        pTag.removeAttribute("style");
+                                        pTag.innerHTML = JSON.stringify(xhr.responseText);
+                                        pTag.setAttribute("style","color:green");
+                                        root.append(pTag);
+                                } else {
+                                        pTag.removeAttribute("style");
+                                        pTag.setAttribute("style","color:red");
+                                        
+                                        root.append(pTag);
+                                        console.log("Fetching Data.......");
+                                }
+                        }
+                        xhr.open(method,url);
+                        xhr.send();
+                	}
+	
+		})();
+		
+	</script>
+	
+</html>
